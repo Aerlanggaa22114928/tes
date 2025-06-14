@@ -27,6 +27,41 @@ def klasifikasi_bmi(bmi):
     else:
         return "Obesitas", "❗"
 
+# Fungsi saran berdasarkan kondisi
+def saran_personalisasi(kategori, gender, age, activity_level):
+    saran = ""
+    if kategori == "Obesitas":
+        saran = "Anda berada dalam kategori obesitas. "
+        if activity_level == "Rendah":
+            saran += "Tingkatkan aktivitas fisik secara bertahap, seperti berjalan kaki setiap hari selama 30 menit. "
+        elif activity_level == "Sedang":
+            saran += "Pertimbangkan untuk meningkatkan durasi atau intensitas olahraga Anda. "
+        else:
+            saran += "Meski aktif, pola makan Anda mungkin perlu diperbaiki. "
+        saran += "Konsultasikan dengan ahli gizi untuk rencana diet yang sesuai."
+    elif kategori == "Overweight":
+        saran = "Anda sedikit kelebihan berat badan. "
+        if age < 30:
+            saran += "Manfaatkan usia muda untuk membentuk kebiasaan sehat. "
+        else:
+            saran += "Jaga pola makan dan perbanyak aktivitas ringan seperti bersepeda atau berenang. "
+        if gender == "Perempuan":
+            saran += "Perhatikan hormon dan kebutuhan nutrisi harian."
+    elif kategori == "Kurus":
+        saran = "Berat badan Anda di bawah normal. "
+        if activity_level == "Tinggi":
+            saran += "Mungkin Anda membakar lebih banyak kalori dari yang dikonsumsi. Tambahkan asupan makanan bergizi. "
+        else:
+            saran += "Perbanyak konsumsi makanan tinggi kalori sehat seperti alpukat, kacang-kacangan, dan susu. "
+        if age < 18:
+            saran += "Konsultasi dengan dokter penting karena masa pertumbuhan."
+    else:
+        saran = "Berat badan Anda normal. Pertahankan gaya hidup sehat! 💪"
+        if activity_level == "Rendah":
+            saran += "Cobalah aktif minimal 3x seminggu agar tubuh tetap fit."
+
+    return saran
+
 # Tombol prediksi
 if st.button("Cek Status Berat Badan"):
     bmi = hitung_bmi(weight, height)
@@ -36,11 +71,5 @@ if st.button("Cek Status Berat Badan"):
     st.write(f"**Kategori:** {kategori} {emoji}")
 
     # Saran berdasarkan hasil
-    if kategori == "Obesitas":
-        st.warning("Anda berada dalam kategori obesitas. Disarankan untuk berkonsultasi dengan ahli gizi dan memperbaiki pola makan serta olahraga.")
-    elif kategori == "Overweight":
-        st.info("Anda sedikit kelebihan berat badan. Jaga pola makan dan tambahkan aktivitas fisik.")
-    elif kategori == "Kurus":
-        st.info("Berat badan Anda di bawah normal. Konsultasikan dengan ahli gizi untuk pola makan yang lebih seimbang.")
-    else:
-        st.success("Berat badan Anda normal. Pertahankan gaya hidup sehat! 💪")
+    saran = saran_personalisasi(kategori, gender, age, activity_level)
+    st.info(saran)
