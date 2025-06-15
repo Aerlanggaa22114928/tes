@@ -2,7 +2,7 @@ import streamlit as st
 
 # Judul aplikasi
 st.title("🩺 Aplikasi Deteksi Obesitas ")
-st.write("Aplikasi ini membantu Anda mengklasifikasikan status berat badan berdasarkan BMI (Body Mass Index).")
+
 
 # Input pengguna
 gender = st.selectbox("Jenis Kelamin", ["Laki-laki", "Perempuan"])
