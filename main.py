@@ -14,7 +14,7 @@ activity_level = st.selectbox("Tingkat Aktivitas Fisik", ["Rendah", "Sedang", "T
 def hitung_bmi(berat, tinggi_cm):
     tinggi_m = tinggi_cm / 100
     bmi = berat / (tinggi_m ** 2)
-    return round(bmi, 2)
+    return round(bmi, 2), tinggi_m
 
 # Klasifikasi BMI
 def klasifikasi_bmi(bmi):
@@ -70,12 +70,17 @@ def saran_berat_ideal(tinggi_cm):
 
 # Tombol prediksi
 if st.button("Cek Status Berat Badan"):
-    bmi = hitung_bmi(weight, height)
+    bmi, tinggi_m = hitung_bmi(weight, height)
     kategori, emoji = klasifikasi_bmi(bmi)
 
     st.subheader("Hasil:")
     st.write(f"**BMI Anda:** {bmi}")
     st.write(f"**Kategori:** {kategori} {emoji}")
+
+    # Tambahkan perhitungan BMI
+    st.markdown("### 📊 Perhitungan BMI")
+    st.latex(r'''BMI = \frac{Berat\,Badan\,(kg)}{(Tinggi\,Badan\,(m))^2}''')
+    st.write(f"**BMI = {weight} / ({tinggi_m:.2f} x {tinggi_m:.2f}) = {bmi}**")
 
     # Saran berdasarkan hasil
     saran = saran_personalisasi(kategori, gender, age, activity_level)
