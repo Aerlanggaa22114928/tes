@@ -1,8 +1,7 @@
 import streamlit as st
 
 # Judul aplikasi
-st.title("🩺 Aplikasi Deteksi Obesitas ")
-
+st.title("🩺 Aplikasi Deteksi Obesitas")
 
 # Input pengguna
 gender = st.selectbox("Jenis Kelamin", ["Laki-laki", "Perempuan"])
@@ -11,12 +10,13 @@ height = st.number_input("Tinggi Badan (cm)", min_value=100, max_value=250, valu
 weight = st.number_input("Berat Badan (kg)", min_value=30, max_value=200, value=70)
 activity_level = st.selectbox("Tingkat Aktivitas Fisik", ["Rendah", "Sedang", "Tinggi"])
 
-# Fungsi menghitung BMI dan klasifikasi
+# Fungsi menghitung BMI
 def hitung_bmi(berat, tinggi_cm):
     tinggi_m = tinggi_cm / 100
     bmi = berat / (tinggi_m ** 2)
     return round(bmi, 2)
 
+# Klasifikasi BMI
 def klasifikasi_bmi(bmi):
     if bmi < 18.5:
         return "Kurus", "⚠️"
@@ -59,13 +59,20 @@ def saran_personalisasi(kategori, gender, age, activity_level):
         saran = "Berat badan Anda normal. Pertahankan gaya hidup sehat! 💪"
         if activity_level == "Rendah":
             saran += "Cobalah aktif minimal 3x seminggu agar tubuh tetap fit."
-
     return saran
+
+# Fungsi menghitung berat badan ideal berdasarkan tinggi badan (BMI 18.5 - 24.9)
+def saran_berat_ideal(tinggi_cm):
+    tinggi_m = tinggi_cm / 100
+    min_ideal = round(18.5 * (tinggi_m ** 2), 1)
+    max_ideal = round(24.9 * (tinggi_m ** 2), 1)
+    return min_ideal, max_ideal
 
 # Tombol prediksi
 if st.button("Cek Status Berat Badan"):
     bmi = hitung_bmi(weight, height)
     kategori, emoji = klasifikasi_bmi(bmi)
+
     st.subheader("Hasil:")
     st.write(f"**BMI Anda:** {bmi}")
     st.write(f"**Kategori:** {kategori} {emoji}")
@@ -73,3 +80,8 @@ if st.button("Cek Status Berat Badan"):
     # Saran berdasarkan hasil
     saran = saran_personalisasi(kategori, gender, age, activity_level)
     st.info(saran)
+
+    # Jika berat badan tidak ideal, tampilkan saran berat ideal
+    if kategori != "Normal":
+        min_ideal, max_ideal = saran_berat_ideal(height)
+        st.warning(f"👉 Berat badan ideal Anda berkisar antara **{min_ideal} kg** hingga **{max_ideal} kg**.")
